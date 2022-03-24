@@ -2,6 +2,7 @@ require('dotenv').config()
 const express = require('express')
 const db = require('./config/db')
 const bodyParser = require('body-parser')
+const boolParser = require('express-query-boolean');
 const userRoute = require('./modules/user/user.route')
 
 const auth = require('./middleware/auth')
@@ -11,10 +12,10 @@ require('dotenv').config()
 
 const app = express()
 app.use(
-    bodyParser.urlencoded({
-        extended: false
-    })
+    bodyParser.json()
 )
+app.use(boolParser())
+
 app.use(bodyParser.json());
 // parse user to header
 auth(app)

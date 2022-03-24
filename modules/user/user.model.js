@@ -1,5 +1,5 @@
 const mongoose = require('mongoose')
-const bcrypt = require('bcrypt')
+const bcrypt = require('bcryptjs')
 
 const Schema = mongoose.Schema
 
@@ -27,6 +27,10 @@ const User = new Schema({
         enum: ['admin', 'lessor', 'lessee'],
         required: true,
         index: true
+    },
+    active: {
+        type: Boolean,
+        default: false
     }
         
 }, {

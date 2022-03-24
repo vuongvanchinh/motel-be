@@ -1,4 +1,4 @@
-const bcrypt = require('bcrypt')
+const bcrypt = require('bcryptjs')
 const User = require('./user.model')
 const jwt = require('jsonwebtoken')
 
@@ -46,6 +46,48 @@ class UserController {
             }
         }
     }
+
+    async getUser(req, res, next) {
+        const {role} = req.query
+        if (role !== 'lessee' && role !== 'lessor') {
+            return next({
+                status: 400,
+                message: "Deo co dau ban oi"
+            })
+        }
+        User.find(req.query)
+        .then((users) => {
+            return res.json(users)
+        })
+        .catch((err) =>  {
+            next({
+                status: 400,
+                message: "An error was occured"
+            })          
+        })
+    }
+
+    getUserDetail(req, res, next) {
+        console.log(req.params)
+        const {id} = req.params
+        User.findOne({_id: id})
+        .then(user => {
+            user.password = undefined            
+            return res.json(user)
+        })
+        .catch((err) => {
+            console.log(err)
+            next({
+                status: 404,
+                message: err.message
+            })
+        })
+    }
+
+    getCurrentUserInfo(req, res, next) {
+        return res.json(req.user)
+    }
+
 }
 
 module.exports = new UserController()
