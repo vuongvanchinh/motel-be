@@ -16,7 +16,9 @@ class UserController {
                     res.status(200).json(user)
                 
                 })
-                .catch(err => res.status(400).json(err))
+                .catch(err => res.status(400).json({
+                    message: err.message
+                }))
             } else {
                 res.status(400).json({
                     password: 'Password must be stronger'
@@ -55,14 +57,14 @@ class UserController {
                 message: "Deo co dau ban oi"
             })
         }
-        User.find(req.query)
+        User.find(req.query).select(['-password'])
         .then((users) => {
             return res.json(users)
         })
         .catch((err) =>  {
             next({
                 status: 400,
-                message: "An error was occured"
+                message: err.message
             })          
         })
     }
@@ -87,7 +89,46 @@ class UserController {
     getCurrentUserInfo(req, res, next) {
         return res.json(req.user)
     }
+    
+    updateUser(req, res, next){
+        const {id} = req.params
+        const updateData = req.body
+        updateData.role = undefined
+        updateData.password = undefined
+        User.findByIdAndUpdate({_id:id}, updateData, {new: true}).then(user => {
+            return res.json(user)
+        }).catch(err => {
+            return next({
+                status: 400,
+                message: err.message
+            })
+        })
 
+
+    }
+
+    deleteUser(req, res, next) {
+        const {id} = req.params
+        if (id !== req.user._id) {
+            User.findOneAndDelete({_id: id})
+            .then(user => {
+                user.password = undefined
+                return res.json(user)
+            })
+            .catch(err => {
+                next({
+                    status: 400,
+                    message: err.message
+                })
+            })
+        } else {
+            next({
+                status: 400,
+                message: "Can not delete yourself!"
+            })
+        }
+       
+    }
 }
 
 module.exports = new UserController()

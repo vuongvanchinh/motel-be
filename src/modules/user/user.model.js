@@ -7,6 +7,7 @@ const User = new Schema({
     email: {
         type: String, required: false,
         unique: true,
+        lowercase: true,
         validate: {
             validator: (email) => {
                 if(email !== null) {
@@ -31,6 +32,11 @@ const User = new Schema({
     active: {
         type: Boolean,
         default: false
+    },
+    phone: {
+        type: String,
+        maxlength: 15,
+        default: ""
     }
         
 }, {

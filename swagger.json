@@ -1,0 +1,90 @@
+{
+    "swagger": "2.0",
+    "info": {
+        "title": "chinhvuong",
+        "description": "",
+        "version": "1.0"
+    },
+    "produces": [
+        "application/json"
+    ],
+    "paths": {
+        "/api/user/register": {
+            "post": {
+                "x-swagger-router-controller": "module/user/user.controller",
+                "operationId": "register",
+                "tags": [
+                    "/user"
+                ],
+                "description": "Resister Api ",
+                "parameters": [
+                    {
+                        "name": "email",
+                        "in": "formData",
+                        "required": true,
+                        "type": "string",
+                        "format": "email",
+                        "example": "user@example.com"
+                    },
+                    {
+                        "name": "password",
+                        "in": "formData",
+                        "required": true,
+                        "type": "string"
+                    },
+                    {
+                        "name": "role",
+                        "in": "formData",
+                        "required": true,
+                        "type": "string",
+                        "enum": ["admin", "lessee", "lessor"]
+                    }
+                ],
+                "responses": {
+
+                }
+            }
+        },
+        "/api/user/login": {
+            "post": {
+                "x-swagger-router-controller": "module/user/user.controller",
+                "operationId": "login",
+                "tags": [
+                    "/user"
+                ],
+                "description": "Login Api",
+                "parameters": [
+                    {
+                        "name": "email",
+                        "in": "formData",
+                        "required": true,
+                        "type": "string",
+                        "format": "email",
+                        "example": "user@example.com"
+                    },
+                    {
+                        "name": "password",
+                        "in": "formData",
+                        "required": true,
+                        "type": "string"
+                    }
+                ],
+                "responses": {
+
+                }
+            }
+        }, 
+        "/bar": {
+            "get": {
+                "x-swagger-router-controller": "bar",
+                "operationId": "impossible",
+                "tags": [
+                    "/test"
+                ],
+                "description": "",
+                "parameters": [],
+                "responses": {}
+            }
+        }
+    }
+}
