@@ -5,7 +5,8 @@
   "main": "src/server.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "nodemon src/server.js"
+    "start": "node src/server.js",
+    "dev": "nodemon src/server.js"
   },
   "author": "chinhvuong",
   "license": "ISC",
@@ -19,9 +20,11 @@
     "express-query-boolean": "^2.0.0",
     "jsonwebtoken": "^8.5.1",
     "mongoose": "^6.2.6",
-    "swagger-ui-express": "^4.3.0",
-    "nodemon": "^2.0.15"
+    "swagger-ui-express": "^4.3.0"
+    
   },
   "devDependencies": {
+    "nodemon": "^2.0.15"
   }
+
 }
