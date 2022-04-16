@@ -23,12 +23,13 @@ router.post('/login', userController.login)
  * @tags User
  * @param {string} email.form.required
  * @param {string} password.form.required
- * @param {string} role.form.required - enum:admin,lessee,lessor
+ * @param {string} phone.form.required
  * @example request - other payload example
  * {
  *   "email": "",
  *   "password": "",
- *   "role": "admin|lessee|lessor"
+ *   "name": "",
+ *   "phone": ""
  * }
  */
 router.post('/register', userController.register)

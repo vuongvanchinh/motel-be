@@ -4,6 +4,13 @@ const auth = require('../../middleware/auth/requireAuthenticate')
 const motelController = require('./motel.controller')
 const { isAdmin, isLessor } = require('../user/user.permission')
 const { isAdminOrOwner } = require('./motel.permission')
+const upload = require('../../middleware/multer')
+/**
+ * POST /api/motel/upload-image
+ * @tags Motel
+ */
+router.post('/:id/upload-image', upload.array('images', 4), motelController.uploadImage)
+
 /**
  * GET /api/motel
  * @tags Motel
@@ -11,7 +18,7 @@ const { isAdminOrOwner } = require('./motel.permission')
  * @param {string} rentalPrice.query
  * @param {string} minRentalPrice.query
  */
-router.get('/', auth, motelController.getMotels)
+router.get('/', auth , motelController.getMotels)
 
 /**
  * post /api/motel
@@ -21,7 +28,8 @@ router.get('/', auth, motelController.getMotels)
  * @param {string} address.form.required
  * @param {number} rentalPrice.form.required
  * @param {number} minRentalPrice.form.required
- * @param {array<Image>} images.form.required - array of Image 
+ * @param {number} type.form.required
+ * @param {string} postType.form.required
  * @example request - payload
  * {
  *  "title": "",
@@ -29,10 +37,11 @@ router.get('/', auth, motelController.getMotels)
  *  "address":"",
  *  "rentalPrice":0,
  *  "minRentalPrice":0,
- *  "images": [{"_id": "", "url":""}]
+ *  "type": 1,
+ *  "postType": "renting|roomate",
  * }
  */
-router.post('/', isLessor, motelController.createMotel)
+router.post('/', auth, motelController.createMotel)
 
 /**
  * put /api/motel/{id}/censored
@@ -52,6 +61,8 @@ router.put('/:id/censored', isAdmin, motelController.censoredMotel)
  * @param {string} address.form.required
  * @param {number} rentalPrice.form.required
  * @param {number} minRentalPrice.form.required
+ * @param {number} type.form.required
+ * @param {string} postType.form.required
  * @param {array<Image>} images.form.required - array of Image 
  * @example request - payload
  * {
@@ -60,6 +71,8 @@ router.put('/:id/censored', isAdmin, motelController.censoredMotel)
  *  "address":"",
  *  "rentalPrice":0,
  *  "minRentalPrice":0,
+ *  "type": 1,
+ *  "postType": "renting|roomate",
  *  "images": [{"_id": "", "url":""}]
  * }
  */
@@ -72,6 +85,7 @@ router.put('/:id', isAdminOrOwner, motelController.updateMotel)
  * 
  */
 router.delete('/:id', isAdminOrOwner, motelController.deleteMotel)
+
 
 
 /**

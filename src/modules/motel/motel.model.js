@@ -40,6 +40,20 @@ const Motel = new Schema({
     censored: {
         type: Boolean,
         default:false
+    },
+    utilities: {
+        type: Array
+    },
+    area: {
+        type: Number
+    },
+    postType: {
+        type: String,
+        enum: ['renting', 'roomate'],
+    },
+    type: {
+        type: Number,
+        enum: [0, 1, 2, 3, 4]
     }
 }, {
     timestamps: true

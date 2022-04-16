@@ -27,6 +27,7 @@ const User = new Schema({
         type: String,
         enum: ['admin', 'lessor', 'lessee'],
         required: true,
+        default:"lessee",
         index: true
     },
     active: {
@@ -37,7 +38,11 @@ const User = new Schema({
         type: String,
         maxlength: 15,
         default: ""
-    }
+    },
+    name: {
+        type: String,
+        maxlength: 100,
+    },
         
 }, {
     timestamps: true

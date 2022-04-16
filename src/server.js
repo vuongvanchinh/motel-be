@@ -23,6 +23,7 @@ app.use(
     bodyParser.json({limit: '50mb'})
 )
 app.use(boolParser())
+app.use('/public', express.static('public'))
 app.use('/api/donations', (req, res) => {
     res.json([
         {

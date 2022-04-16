@@ -1,13 +1,12 @@
 const bcrypt = require('bcryptjs')
 const User = require('./user.model')
 const jwt = require('jsonwebtoken')
-
+const {role} = require('../../constants/index')
 class UserController {
     async register(req, res, next) {
         const re = /^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{8,}$/
         try {
             if (re.test(req.body.password)) {
-
                 req.body.password = await bcrypt.hash(req.body.password, parseInt(process.env.SALT_ROUND))
                 const newUser = new User(req.body)
                 newUser.save()
@@ -93,7 +92,10 @@ class UserController {
     updateUser(req, res, next){
         const {id} = req.params
         const updateData = req.body
-        updateData.role = undefined
+        if (updateData.role == role.admin) {
+            updateData.role = undefined
+        }
+        
         updateData.password = undefined
         User.findByIdAndUpdate({_id:id}, updateData, {new: true}).then(user => {
             return res.json(user)
@@ -103,8 +105,6 @@ class UserController {
                 message: err.message
             })
         })
-
-
     }
 
     deleteUser(req, res, next) {
