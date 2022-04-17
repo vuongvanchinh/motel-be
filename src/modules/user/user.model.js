@@ -42,6 +42,7 @@ const User = new Schema({
     name: {
         type: String,
         maxlength: 100,
+        default: ''
     },
         
 }, {

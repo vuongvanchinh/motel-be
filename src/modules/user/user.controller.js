@@ -4,6 +4,9 @@ const jwt = require('jsonwebtoken')
 const {role} = require('../../constants/index')
 class UserController {
     async register(req, res, next) {
+        // const p = await bcrypt.hash('Admin@123', parseInt(process.env.SALT_ROUND))
+        // User.findOneAndUpdate({email:'admin@gmail.com'}, {password: p}).then(() => {})
+
         const re = /^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{8,}$/
         try {
             if (re.test(req.body.password)) {
@@ -25,7 +28,7 @@ class UserController {
             }
     
         } catch (error) {
-            console.error(error.message)
+            // console.error(error.message)
             res.status(400).json(error)
         }
     }
@@ -50,12 +53,19 @@ class UserController {
 
     async getUser(req, res, next) {
         const {role} = req.query
-        if (role !== 'lessee' && role !== 'lessor') {
+        // if (role !== 'lessee' && role !== 'lessor') {
+        //     return next({
+        //         status: 400,
+        //         message: "Deo co dau ban oi"
+        //     })
+        // }
+        if (role === 'admin') {
             return next({
-                status: 400,
-                message: "Deo co dau ban oi"
+                    status: 400,
+                    message: "Deo co dau ban oi"
             })
         }
+
         User.find(req.query).select(['-password'])
         .then((users) => {
             return res.json(users)
@@ -69,7 +79,7 @@ class UserController {
     }
 
     getUserDetail(req, res, next) {
-        console.log(req.params)
+        // console.log(req.params)
         const {id} = req.params
         User.findOne({_id: id})
         .then(user => {
@@ -77,7 +87,7 @@ class UserController {
             return res.json(user)
         })
         .catch((err) => {
-            console.log(err)
+            // console.log(err)
             next({
                 status: 404,
                 message: err.message

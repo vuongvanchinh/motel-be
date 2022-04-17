@@ -18,7 +18,7 @@ router.post('/:id/upload-image', upload.array('images', 4), motelController.uplo
  * @param {string} rentalPrice.query
  * @param {string} minRentalPrice.query
  */
-router.get('/', auth , motelController.getMotels)
+router.get('/' , motelController.getMotels)
 
 /**
  * post /api/motel

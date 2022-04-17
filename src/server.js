@@ -23,7 +23,7 @@ app.use(
     bodyParser.json({limit: '50mb'})
 )
 app.use(boolParser())
-app.use('/public', express.static('public'))
+
 app.use('/api/donations', (req, res) => {
     res.json([
         {
@@ -60,7 +60,11 @@ app.use('/api/donations', (req, res) => {
 })
 // parse user to header
 auth(app)
-
+console.log(__dirname + '/../public')
+// app.use('/public', express.static(__dirname + '/public'));
+// app.use('/public', express.static(__dirname + './public'));
+app.use('/public', express.static(__dirname + '/../public'));
+// app.use('/public', express.static(__dirname + '../public'));
 // swager 
 swagger(app)
 

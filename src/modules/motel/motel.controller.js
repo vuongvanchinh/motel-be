@@ -6,7 +6,10 @@ const { Image } = require('./motel.model')
 class MotelController {
     getMotels(req, res, next) {
         const query = req.query
-        Motel.find(query).populate('images', {url:1}).then(motels => {
+        Motel.find(query).populate('images', {url:1}).populate('owner', {name:1}).then(motels => {
+            for(let i = 0; i < motels.length; i++) {
+                motels[i].images = fillLinkImages(motels[i].images, req.protocol + '://' + req.get('host'))
+            }
             res.json(motels)
         })
         .catch(err => {
@@ -35,7 +38,7 @@ class MotelController {
     async motelDetail(req, res, next) {
         const {id} = req.params
         Motel.findOne({_id: id}).populate('images', {url:1}).then(motel => {
-            motel.images = fillLinkImages(motel.images, req.headers.host)
+            motel.images = fillLinkImages(motel.images, req.protocol + '://' + req.get('host'))
             return res.json(motel)
         })
         
@@ -91,6 +94,7 @@ class MotelController {
     
     async uploadImage(req, res, next) {
         const {id} = req.params
+        const d = await Image.deleteMany({})
         const motel = await Motel.findOne({ _id: id });
         console.log(motel)
         console.log(req)
@@ -106,7 +110,7 @@ class MotelController {
                     Image.insertMany(arr).then(function(images){
                         motel.images = images.map(item => item._id)
                         motel.save().then(() => {
-                            return res.json(fillLinkImages(images, req.headers.host))
+                            return res.json(fillLinkImages(images, req.protocol + '://' + req.get('host')))
                         })
                         
                     }).catch(err => {

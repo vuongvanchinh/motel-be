@@ -14,7 +14,8 @@ const Motel = new Schema({
     },
     address: {
         type: String,
-        required: true,
+        // required: true,
+        default:''
     },
     rentalPrice: {
         type: Number,
