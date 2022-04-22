@@ -46,7 +46,7 @@ class UserController {
             } else {
                 res.status(400).json({
                     message: "Password not exact"
-                })
+                })     
             }
         }
     }
@@ -138,6 +138,27 @@ class UserController {
             })
         }
        
+    }
+
+    async stats (req, res, next) {
+        let query = req.query
+        if (Object.keys(query).length === 0) {
+            query.type = 1
+        }
+        try {
+            const pri = await User.count(query)
+            const total = await User.count({})
+            return res.json({
+                total: total,
+                primary: pri,
+                secondary: total - pri
+            })
+        } catch (error) {
+            return next({
+                status: 400,
+                message: error.message
+            })
+        }
     }
 }
 

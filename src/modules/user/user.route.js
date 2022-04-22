@@ -3,6 +3,7 @@ const router = express.Router()
 const userController = require('./user.controller')
 const auth = require('../../middleware/auth/requireAuthenticate')
 const {isAdmin} = require('../user/user.permission')
+const motelController = require('../motel/motel.controller')
 
 
 /**
@@ -40,6 +41,13 @@ router.get('/info', auth, (req, res, next) => {
         message: "pass"
     })
 })
+/**
+ * get /api/user/stats?role=lesee
+ * @tags User
+*/
+router.get('/stats', motelController.stats)
+
+
 /**
  * get /api/user/my-info
  * @tags User

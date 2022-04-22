@@ -6,6 +6,11 @@ const { Image } = require('./motel.model')
 class MotelController {
     getMotels(req, res, next) {
         const query = req.query
+        if (query.title) {
+            query.title = {
+                $regex:  new RegExp(query.title, "i")
+            }
+        }
         Motel.find(query).populate('images', {url:1}).populate('owner', {name:1}).then(motels => {
             for(let i = 0; i < motels.length; i++) {
                 motels[i].images = fillLinkImages(motels[i].images, req.protocol + '://' + req.get('host'))
@@ -37,7 +42,7 @@ class MotelController {
 
     async motelDetail(req, res, next) {
         const {id} = req.params
-        Motel.findOne({_id: id}).populate('images', {url:1}).then(motel => {
+        Motel.findOne({_id: id}).populate('images', {url:1}).populate('owner', {name:1}).then(motel => {
             motel.images = fillLinkImages(motel.images, req.protocol + '://' + req.get('host'))
             return res.json(motel)
         })
@@ -134,6 +139,27 @@ class MotelController {
             next({
                 status: 404,
                 message: "Not found"
+            })
+        }
+    }
+    async stats(req, res, next) {
+        let query = req.query
+
+        if (Object.keys(query).length === 0) {
+            query.type = 1
+        }
+        try {
+            const zoomate = await Motel.count(query)
+            const total = await Motel.count({})
+            return res.json({
+                total: total,
+                primary: zoomate,
+                secondary: total - zoomate
+            })
+        } catch (error) {
+            return next({
+                status: 400,
+                message: error.message
             })
         }
     }
