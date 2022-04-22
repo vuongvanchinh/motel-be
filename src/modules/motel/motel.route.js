@@ -5,7 +5,10 @@ const motelController = require('./motel.controller')
 const { isAdmin, isLessor } = require('../user/user.permission')
 const { isAdminOrOwner } = require('./motel.permission')
 const upload = require('../../middleware/multer')
-
+/**
+ * GET /api/motel/stats
+ * @tags Motel
+ */
 router.get('/stats', isAdmin, motelController.stats)
 /**
  * POST /api/motel/upload-image
