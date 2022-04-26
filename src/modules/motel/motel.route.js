@@ -11,7 +11,7 @@ const upload = require('../../middleware/multer')
  */
 router.get('/stats', isAdmin, motelController.stats)
 /**
- * POST /api/motel/upload-image
+ * POST /api/motel/{id}/upload-image
  * @tags Motel
  */
 router.post('/:id/upload-image', upload.array('images', 4), motelController.uploadImage)
